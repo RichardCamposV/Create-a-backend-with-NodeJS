@@ -1,0 +1,18 @@
+{
+  "name": "desde-0-hasta-maestro---creando-el-backend-con-node-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
+  }
+}
