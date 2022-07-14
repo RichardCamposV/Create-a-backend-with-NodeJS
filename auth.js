@@ -5,7 +5,7 @@ const JwtStrategy = require('passport-jwt').Strategy,
 module.exports = passport => {
     const opts = {
         jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("JWT"),
-        secretOrKey: 'secretpassword' //TO DO should stay in environment variable
+        secretOrKey: 'secretPassword' //TO DO should stay in environment variable
     }
 
     passport.use(new JwtStrategy(opts, (decoded, done) => {
