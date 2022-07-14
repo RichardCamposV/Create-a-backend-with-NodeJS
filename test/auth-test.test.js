@@ -19,7 +19,7 @@ describe('Suite de pruebas auth', () => {
 
     it('should return 400 whtn no data is provided', (done) => {
         chai.request(app)
-            .post('/login')
+            .post('/auth/login')
             .end((err, res) => {
                 // Expect valid login
                 chai.assert.equal(res.statusCode, 400);
@@ -29,7 +29,7 @@ describe('Suite de pruebas auth', () => {
 
     it('should return 200 and token for successful login', (done) => {
         chai.request(app)
-            .post('/login')
+            .post('/auth/login')
             .set('content-type', 'application/json')
             .send({user: 'bettatech', password: '1234'})
             .end((err, res) => {
@@ -41,7 +41,7 @@ describe('Suite de pruebas auth', () => {
 
     it('should return 200 when jwt is valid', (done) => {
         chai.request(app)
-            .post('/login')
+            .post('/auth/login')
             .set('content-type', 'application/json')
             .send({user: 'portly', password: '1208'})
             .end((err, res) => {
