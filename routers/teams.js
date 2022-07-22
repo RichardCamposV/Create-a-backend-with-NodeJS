@@ -4,6 +4,7 @@ const router = express.Router();
 const passport = require('passport');
 const teamsController = require('../controllers/teams');
 const { getUser } = require('../controllers/users');
+const axios = require('axios').default;
 
 require('../auth')(passport);
 
@@ -15,13 +16,34 @@ router.route('/')
             team: teamsController.getTeamOfUser(req.user.userId)
         });
     })
-    .put((req, res) => {
-        teamsController.setTeam(req.body.user, req.body.team);
+    .put(passport.authenticate('jwt', {session: false}), (req, res) => {
+        teamsController.setTeam(req.user.userId, req.body.team);
+        res.status(200).send();
     })
 
 router.route('/pokemons')
-    .post(() => {
-        res.send(200).send('hello world!')
+    .post(passport.authenticate('jwt', {session: false}),(req, res) => {
+        let pokemonName = req.body.name;
+        console.log('calling pokeapi');
+        axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`)
+            .then(function (response) {
+                // handle success
+                let pokemon = {
+                    name: pokemonName, 
+                    pokedexNumber: response.data.id
+                };
+                teamsController.addPokemon(req.user.userId, pokemon);
+
+                res.send(201).json(pokemon)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+                res.status(400).json({message: error});
+            })
+            .then(function () {
+                // always executed
+            });
     })
 
 router.route('/pokemons/:pokeid')
