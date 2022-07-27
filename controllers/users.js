@@ -1,7 +1,7 @@
 
 const uuid = require('uuid');
 const crypto = require('../crypto.js');
-const teams = require('./teams');
+const teams = require('../teams/teams.controller');
 
 let userDatabase = {};
 

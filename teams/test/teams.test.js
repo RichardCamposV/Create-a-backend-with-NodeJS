@@ -1,9 +1,9 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const app = require('../app').app;
-const usersController = require('../controllers/users');
-const teamsController = require('../controllers/teams');
+const app = require('../../app').app;
+const usersController = require('../../controllers/users');
+const teamsController = require('../teams.controller');
 
 chai.use(chaiHttp);
 
@@ -57,6 +57,41 @@ describe('Suite de pruebas teams', () => {
     });
 
     it('should return the pokedex number', (done) => {
+        let team = [{name: 'Charizard'}, {name: 'Blastoise'}, {name: 'Pikachu'}];
+        chai.request(app)
+            .post('/auth/login')
+            .set('content-type', 'application/json')
+            .send({user: 'portly', password: '1208'})
+            .end((err, res) => {
+                let token = res.body.token;
+                // Expect valid login
+                chai.assert.equal(res.statusCode, 200);
+                chai.request(app)
+                    .put('/teams')
+                    .send({team: team})
+                    .set('Authorization', `JWT ${token}`)
+                    .end((err, res) => {
+                        chai.request(app)
+                            .delete('/teams/pokemons/1')
+                            .set('Authorization', `JWT ${token}`)
+                            .end((err, res) => {
+                                chai.request(app)
+                                    .get('/teams')
+                                    .set('Authorization', `JWT ${token}`)
+                                    .end((err, res) => {
+                                        // Have a team with Charizard and Blastoise
+                                        // {trainer: 'portly', team: [Pokemon]}
+                                        chai.assert.equal(res.statusCode, 200);
+                                        chai.assert.equal(res.body.trainer, 'portly');
+                                        chai.assert.equal(res.body.team.length, team.length - 1);
+                                        done();
+                                    });
+                            });
+                    });
+            });
+    });
+
+    it('should remove the pokemon at index', (done) => {
         // when the call is not the correct key
         let pokemonName = 'Bulbasaur';
         chai.request(app)
@@ -88,6 +123,7 @@ describe('Suite de pruebas teams', () => {
                     });
             });
     });
+
 });
 
 after((done) => {
