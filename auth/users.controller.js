@@ -35,11 +35,9 @@ const getUserIdFromUserName = (userName) => {
 }
 
 const checkUserCredentials = (userName, password, done) => {
-    console.log('checking user credentials')
     // Check if the credentials are corrects
     let user = getUserIdFromUserName(userName);
     if (user) {
-        console.log(user);
         crypto.comparePassword(password, user.password, done);
     } else {
         done('Missing user');
