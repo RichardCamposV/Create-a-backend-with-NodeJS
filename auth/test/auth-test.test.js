@@ -1,8 +1,8 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const usersController = require('../controllers/users');
-const app = require('../app').app;
+const usersController = require('../users.controller');
+const app = require('../../app').app;
 
 chai.use(chaiHttp);
 
