@@ -38,7 +38,7 @@ describe('Suite de pruebas auth', () => {
         chai.request(app)
             .post('/auth/login')
             .set('content-type', 'application/json')
-            .send({user: 'bettatech', password: '1234'})
+            .send({user: 'portly', password: '1208'})
             .end((err, res) => {
                 // Expect valid login
                 chai.assert.equal(res.statusCode, 200);
