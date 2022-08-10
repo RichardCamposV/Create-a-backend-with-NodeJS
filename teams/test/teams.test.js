@@ -7,15 +7,15 @@ const teamsController = require('../teams.controller');
 
 chai.use(chaiHttp);
 
-before((done) => {
-    usersController.registerUser('bettatech', '1234');
-    usersController.registerUser('mastermind', '4321');
-    usersController.registerUser('portly', '1208');
-    done()
-});
+beforeEach(async () => {
+    await usersController.registerUser('bettatech', '1234');
+    await usersController.registerUser('mastermind', '4321');
+    await usersController.registerUser('portly', '1208');
+})
 
 // afterEach() execute when all it() complete
 afterEach(async () => {
+    await usersController.cleanUpUsers();
     await teamsController.cleanUpTeam();
 })
 
@@ -158,7 +158,3 @@ describe('Suite de pruebas teams', () => {
 
 });
 
-after((done) => {
-    usersController.cleanUpUsers();
-    done();
-});

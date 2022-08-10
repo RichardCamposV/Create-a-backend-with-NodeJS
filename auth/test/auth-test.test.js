@@ -2,15 +2,21 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const usersController = require('../users.controller');
+const teamsController = require('../../teams/teams.controller');
+
 const app = require('../../app').app;
 
 chai.use(chaiHttp);
 
-before((done) => {
-    usersController.registerUser('bettatech', '1234');
-    usersController.registerUser('mastermind', '4321');
-    usersController.registerUser('portly', '1208');
-    done()
+beforeEach(async () => {
+    await usersController.registerUser('bettatech', '1234');
+    await usersController.registerUser('mastermind', '4321');
+    await usersController.registerUser('portly', '1208');
+});
+
+afterEach(async() => {
+    await usersController.cleanUpUsers();
+    await teamsController.cleanUpTeam();
 });
 
 describe('Suite de pruebas auth', () => {
@@ -65,9 +71,4 @@ describe('Suite de pruebas auth', () => {
             
     });
     
-});
-
-after((done) => {
-    usersController.cleanUpUsers();
-    done();
 });
